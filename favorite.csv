@@ -1,0 +1,5 @@
+id,parent,type,label,url
+root,,folder,root,
+google,root,leaf,google,https://google.com/
+w3c,root,leaf,W3C,https://www.w3.org/
+bitbucket,root,leaf,bitbucket,https://bitbucket.org/product

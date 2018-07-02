@@ -1,0 +1,6 @@
+{
+    "encoding" : "SJIS|UTF8",
+    "base_directory": "write this files parent directory",
+    "dot_path": "for exmple C:\\Program Files (x86)\\Graphviz2.38\\bin\\twopi.exe",
+    "out_path": "if empty string then std out "
+}
