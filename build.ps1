@@ -1,4 +1,9 @@
-﻿Param($Config = ".\config.json", $InPath = ".\favorite.csv", $OutPath)
+﻿Param(
+    $Config = ".\config.json",
+    $InPath = ".\favorite.csv",
+    $OutPath,
+    [ValidateSet("dot", "svg", "png")][string]$OutFormat = "svg"
+);
 
 #各種設定を確認
 function Check-Configration($Conf) {
@@ -105,6 +110,14 @@ if($OutPath -is [string]) {
     $out = $Conf.out_path;
 }
 
+if(($OutFormat -eq "png") -and ($out -eq $StdOut)) {
+    Write-Host "png形式出力では出力先ファイル名を指定してください";
+    exit 1
+}
+
+
+
+
 try {
     $src = Get-Item -ErrorAction Stop -Path $InPath;
 } catch [Exception] {
@@ -121,17 +134,25 @@ $target = Get-Item $targetFile;
 $template = Get-Item ".\template.txt";
 
 
-
-
-Build-Graph -src $src -encode $EncodingMap[$Conf.encoding] |
-    Expand-Template -src $template |
-    Out-File -FilePath $target.PSPath -Append -Encoding utf8;
-
-if($out -eq $StdOut) {
-    &$conf.dot_path -Tsvg $targetFile
+if($OutFormat -eq "dot") {
+    if($out -eq $StdOut) {
+        Build-Graph -src $src -encode $EncodingMap[$Conf.encoding] |
+            Expand-Template -src $template
+    } else {
+        Build-Graph -src $src -encode $EncodingMap[$Conf.encoding] |
+            Expand-Template -src $template |
+            Out-File -FilePath $target.PSPath -Append -Encoding utf8;
+    }
 } else {
-    &$conf.dot_path -Tsvg $targetFile -o $out
-}
+    Build-Graph -src $src -encode $EncodingMap[$Conf.encoding] |
+        Expand-Template -src $template |
+        Out-File -FilePath $target.PSPath -Append -Encoding utf8;
 
+    if($out -eq $StdOut) {
+        &$conf.dot_path $("-T" + $OutFormat) $targetFile
+    } else {
+        &$conf.dot_path $("-T" + $OutFormat) $targetFile -o $out
+    }
+}
 
 
