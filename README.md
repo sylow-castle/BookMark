@@ -84,13 +84,13 @@ OutFormatオプションで"dot"以外を指定した時は必須です。
 
 データCSV：
 
-<pre>
+```
 id,parent,type,label,url
 root,,folder,root,
 google,root,leaf,google,https://google.com/
 w3c,root,leaf,W3C,https://www.w3.org/
 bitbucket,root,leaf,bitbucket,https://bitbucket.org/product
-</pre>
+```
 
 
 設定ファイル：
